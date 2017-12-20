@@ -1,4 +1,4 @@
-#
+# Omnibus::Software definition to build the GNU Compiler Collection.
 # Copyright 2017 Codethink Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,24 +14,21 @@
 # limitations under the License.
 #
 
-name "codethink-llvm"
-maintainer "Codethink Ltd."
-homepage "https://www.github.com/CodethinkLabs/omnibus-codethink-toolchain/"
+name "cmake"
 
-install_dir "/opt/codethink-llvm"
+default_version "3.10.1"
 
-build_version do
-  source :version, from_dependency: 'llvm'
+source :url => "https://cmake.org/files/v3.10/cmake-3.10.1.tar.gz",
+       :md5 => "9a726e5ec69618b172aa4b06d18c3998"
+
+dependency "gcc"
+
+whitelist_file "bin/ccmake"
+relative_path "cmake-#{version}"
+
+build do
+  env = with_llvm_compiler_flags(with_embedded_path)
+  command "./bootstrap --prefix=#{install_dir}/embedded --parallel=#{workers}", env: env
+  make "-j #{workers}", env: env
+  make "-j #{workers} install", env: env
 end
-build_iteration 1
-
-# toolchain dependencies/components
-dependency "llvm"
-
-# Version manifest file
-dependency "version-manifest"
-
-exclude "**/.git"
-exclude "**/bundler/git"
-
-require_relative "config-overrides.rb"

@@ -19,3 +19,10 @@ def with_codethink_compiler_flags(platform, env = {}, opts = {})
     merge("CXXFLAGS" => compiler_flags["CFLAGS"]).
     merge("CPPFLAGS" => compiler_flags["CFLAGS"])
 end
+
+def with_llvm_compiler_flags(env = {}, opts = {})
+  env = with_standard_compiler_flags(env = env, opts = opts)
+  
+  return env.
+    merge("LD_LIBRARY_PATH" => "#{install_dir}/lib;#{install_dir}/lib64;#{install_dir}/libexec;#{install_dir}/embedded/lib")
+end
