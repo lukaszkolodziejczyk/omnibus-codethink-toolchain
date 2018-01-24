@@ -13,16 +13,13 @@
 # limitations under the License.
 
 name "llvm"
-default_version "5.0.1"
+default_version "#{ENV['GIT_COMMIT_SHA']}"
 
-source :url => "http://releases.llvm.org/#{version}/llvm-#{version}.src.tar.xz",
-       :md5 => "3a4ec6dcbc71579eeaec7cb157fe2168"
+source git: "https://gitlab.com/lukasz.m.kolodziejczyk/llvm.git"
 
 dependency "ninja"
 dependency "zlib"
 dependency "ncurses"
-
-relative_path "llvm-#{version}.src"
 
 llvm_build_dir = "#{build_dir}/build-llvm"
 
